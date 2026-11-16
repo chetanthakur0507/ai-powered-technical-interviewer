@@ -1,0 +1,3 @@
+import { NextResponse } from 'next/server'; import { store } from '../../../lib/store';
+export async function GET() { return NextResponse.json({ requests: store().fileRequests, templates: store().templates }); }
+export async function POST(req) { const b = await req.json(); if (!b.subject) return NextResponse.json({ error: 'Subject zaroori hai' }, { status: 400 }); const r = { id: 'FR-' + Math.floor(100 + Math.random()*900), student: b.student || 'Student', subject: b.subject, type: b.type || 'Practical File', pages: Number(b.pages) || 30, deadline: b.deadline || '-', budget: Number(b.budget) || 0, status: 'Requested', desc: b.desc || '', offers: [] }; store().fileRequests.unshift(r); return NextResponse.json(r, { status: 201 }); }
